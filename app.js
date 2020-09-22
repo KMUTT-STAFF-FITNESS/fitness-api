@@ -7,7 +7,7 @@ const fs = require("fs");
 const OPTS = {
   server: {
     url: "ldaps://ld0620.sit.kmutt.ac.th/",
-    bindDN: "ou=People,ou=st,dc=sit,dc=kmutt,dc=ac,dc=th",
+    bindDN: "ou=People,ou=st",
     bindCredentials: "secret",
     searchBase: "dc=sit,dc=kmutt,dc=ac,dc=th",
     searchFilter: "(&(uid={{username}})(password={{password}}))",
