@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const LdapStrategy = require("passport-ldapauth");
 const fs = require("fs");
+const cors = require("cors");
 
 const OPTS = {
   server: {
@@ -23,6 +24,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
+app.use(cors());
 
 const users = require("./src/routes/users");
 
