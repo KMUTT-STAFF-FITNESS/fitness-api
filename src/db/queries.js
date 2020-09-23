@@ -32,4 +32,9 @@ module.exports = {
     //   return knex("members");
     // },
   },
+  nfc: {
+    checkIn: function(id) {
+      return knex("nfc").insert(id).returning("*");
+    }
+  }
 };

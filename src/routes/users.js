@@ -27,6 +27,10 @@ router.post(
     res.send(res);
   }
 );
+//nfc checkin
+router.post("/nfc", (req, res) => {
+  queries.nfc.checkIn(req.body).then((result) => res.send(result));
+});
 
 // Upload a file
 router.post(
