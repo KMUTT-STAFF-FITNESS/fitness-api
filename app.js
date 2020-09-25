@@ -7,11 +7,11 @@ const cors = require("cors");
 
 const OPTS = {
   server: {
-    url: "ldaps://ld0620.sit.kmutt.ac.th/",
-    bindDN: "ou=People,ou=st",
-    bindCredentials: "secret",
+    url: "ldaps://ld0620.sit.kmutt.ac.th",
+    bindDN: "ou=People,ou=staff,dc=sit,dc=kmutt,dc=ac,dc=th",
+    bindCredentials: "password",
     searchBase: "dc=sit,dc=kmutt,dc=ac,dc=th",
-    searchFilter: "(&(uid={{username}})(password={{password}}))",
+    searchFilter: "(uid={{username}})",
     tlsOptions: {
       ca: [fs.readFileSync("./cacert.pem")],
     },

@@ -20,13 +20,31 @@ router.post("/users", (req, res) => {
   queries.users.createUser(req.body).then((result) => res.send(result));
 });
 
-router.post(
-  "/login",
-  passport.authenticate("ldapauth", { session: false }),
-  function (req, res) {
-    res.send(res);
-  }
-);
+// router.post(
+//   "/login",
+//   passport.authenticate("ldapauth", { session: false }),
+//   function (req, res) {
+//     res.send("status : ",res);
+//   }
+// );
+
+router.post("/login", function (req, res, next) {
+  passport.authenticate("ldapauth", { session: false }, function (
+    err,
+    user,
+    info
+  ) {
+    if (err) {
+      return next(err); // will generate a 500 error
+    }
+    // Generate a JSON response reflecting authentication status
+    if (!user) {
+      return res.send({ success: false, message: "authentication failed" });
+    }
+    return res.send({ success: true, message: "authentication succeeded" });
+  })(req, res, next);
+});
+
 //nfc checkin
 router.post("/nfc", (req, res) => {
   queries.nfc.checkIn(req.body).then((result) => res.send(result));
