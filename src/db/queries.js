@@ -1,3 +1,4 @@
+const { returning } = require("./knex");
 const knex = require("./knex");
 
 module.exports = {
@@ -35,6 +36,28 @@ module.exports = {
   nfc: {
     checkIn: function(id) {
       return knex("nfc").insert(id).returning("*");
+    }
+  },
+  report: {
+    createReport: function(report){
+      return knex("report_problem").insert(report).returning("*");
+    },
+    getReport: function(){
+      return knex("report_problem").orderBy("report_date", "desc");
+    },
+    createReportTemplate: function(reportTemp){
+      return knex("report_template").insert(reportTemp).returning("*");
+    },
+    getReportTemplateById: function(id){
+      return knex("report_template").where("machine_type_id", id).orderBy("problem_temp_id");
+    }
+  },
+  notification: {
+    createNoti: function(noti){
+      return knex("notification_news").insert(noti).returning("*");
+    },
+    getNoti: function(){
+      return knex("notification_news").orderBy("create_at", "desc");
     }
   }
 };

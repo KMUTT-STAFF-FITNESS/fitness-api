@@ -50,57 +50,57 @@ router.post("/nfc", (req, res) => {
   queries.nfc.checkIn(req.body).then((result) => res.send(result));
 });
 
-// Upload a file
-router.post(
-  "/api/files",
-  minioMiddleware({ op: expressMinio.Ops.post }),
-  (req, res) => {
-    if (req.minio.error) {
-      res.status(400).json({ error: req.minio.error });
-    } else {
-      res.send({ filename: req.minio.post.filename });
-    }
-  }
-);
+// // Upload a file
+// router.post(
+//   "/api/files",
+//   minioMiddleware({ op: expressMinio.Ops.post }),
+//   (req, res) => {
+//     if (req.minio.error) {
+//       res.status(400).json({ error: req.minio.error });
+//     } else {
+//       res.send({ filename: req.minio.post.filename });
+//     }
+//   }
+// );
 
-// List all files
-router.get(
-  "/api/files",
-  minioMiddleware({ op: expressMinio.Ops.list }),
-  (req, res) => {
-    if (req.minio.error) {
-      res.status(400).json({ error: req.minio.error });
-    } else {
-      res.send(req.minio.list);
-    }
-  }
-);
+// // List all files
+// router.get(
+//   "/api/files",
+//   minioMiddleware({ op: expressMinio.Ops.list }),
+//   (req, res) => {
+//     if (req.minio.error) {
+//       res.status(400).json({ error: req.minio.error });
+//     } else {
+//       res.send(req.minio.list);
+//     }
+//   }
+// );
 
-// Download a file
-router.get(
-  `/api/files/:filename`,
-  minioMiddleware({ op: expressMinio.Ops.getStream }),
-  (req, res) => {
-    if (req.minio.error) {
-      res.status(400).json({ error: req.minio.error });
-      return;
-    }
+// // Download a file
+// router.get(
+//   `/api/files/:filename`,
+//   minioMiddleware({ op: expressMinio.Ops.getStream }),
+//   (req, res) => {
+//     if (req.minio.error) {
+//       res.status(400).json({ error: req.minio.error });
+//       return;
+//     }
 
-    res.attachment(req.minio.get.originalName);
-    req.minio.get.stream.pipe(res);
-  }
-);
+//     res.attachment(req.minio.get.originalName);
+//     req.minio.get.stream.pipe(res);
+//   }
+// );
 
-// Delete a file
-router.delete(
-  "/api/files/:filename",
-  minioMiddleware({ op: expressMinio.Ops.delete }),
-  (req, res) => {
-    if (req.minio.error) {
-      res.status(400).json({ error: req.minio.error });
-    } else {
-      res.send(req.minio.delete);
-    }
-  }
-);
+// // Delete a file
+// router.delete(
+//   "/api/files/:filename",
+//   minioMiddleware({ op: expressMinio.Ops.delete }),
+//   (req, res) => {
+//     if (req.minio.error) {
+//       res.status(400).json({ error: req.minio.error });
+//     } else {
+//       res.send(req.minio.delete);
+//     }
+//   }
+// );
 module.exports = router;
