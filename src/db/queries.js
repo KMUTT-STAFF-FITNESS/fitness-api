@@ -34,41 +34,58 @@ module.exports = {
     // },
   },
   nfc: {
-    checkIn: function(id) {
+    checkIn: function (id) {
       return knex("nfc").insert(id).returning("*");
-    }
+    },
   },
   report: {
-    createReport: function(report){
+    createReport: function (report) {
       return knex("report_problem").insert(report).returning("*");
     },
-    getReport: function(){
+    getReport: function () {
       return knex("report_problem").orderBy("report_date", "desc");
     },
-    createReportTemplate: function(reportTemp){
+    createReportTemplate: function (reportTemp) {
       return knex("report_template").insert(reportTemp).returning("*");
     },
-    getReportTemplateById: function(id){
-      return knex("report_template").where("machine_type_id", id).orderBy("problem_temp_id");
-    }
+    getReportTemplateById: function (id) {
+      return knex("report_template")
+        .where("machine_type_id", id)
+        .orderBy("problem_temp_id");
+    },
   },
   notification: {
-    createNoti: function(noti){
+    createNoti: function (noti) {
       return knex("notification_news").insert(noti).returning("*");
     },
-    getNoti: function(){
+    getNoti: function () {
       return knex("notification_news").orderBy("create_at", "desc");
-    }
+    },
   },
   machine: {
-    createMachine: function(machine){
+    createMachine: function (machine) {
       return knex("machine").insert(machine).returning("*");
     },
-    getAllMachine: function(){
-      return knex("machine").orderBy("machine_id");
+    getAllMachine: function () {
+      return knex("machine")
+        .join(
+          "machine_type",
+          "machine.machine_type_id",
+          "=",
+          "machine_type.machine_type_id"
+        )
+        .orderBy("machine_id");
     },
-    getMachineById: function(id){
-      return knex("machine").where("machine_id", id).first();
-    }
-  }
+    getMachineById: function (id) {
+      return knex("machine")
+        .join(
+          "machine_type",
+          "machine.machine_type_id",
+          "=",
+          "machine_type.machine_type_id"
+        )
+        .where("machine_id", id)
+        .first();
+    },
+  },
 };
