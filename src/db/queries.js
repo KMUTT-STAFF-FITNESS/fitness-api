@@ -92,5 +92,8 @@ module.exports = {
     getExerciseByUserId: function (id) {
       return knex("exercise").where("member_id", id).orderBy("date", "asc");
     },
+    createExercise: function(exercise){
+      return knex("exercise").insert(exercise).returning("*");
+    }
   },
 };

@@ -102,6 +102,10 @@ router.get("/exercise/:id", (req, res) => {
     .then((exercise) => res.json(exercise));
 });
 
+router.post("/exercise", (req, res) => {
+  queries.exercise.createExercise(req.body).then((result) => res.send(result));
+});
+
 // // Upload a file
 // router.post(
 //   "/api/files",
