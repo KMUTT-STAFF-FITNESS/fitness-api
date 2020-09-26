@@ -68,7 +68,7 @@ router.post("/report/problem", (req, res) => {
   queries.report.createReport(req.body).then((result) => res.send(result));
 });
 
-router.get("/report/template", (req, res) => {
+router.get("/report/template/:id", (req, res) => {
   queries.report
     .getReportTemplateById(req.params.id)
     .then((template) => res.json(template));
