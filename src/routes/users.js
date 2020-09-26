@@ -50,6 +50,33 @@ router.post("/nfc", (req, res) => {
   queries.nfc.checkIn(req.body).then((result) => res.send(result));
 });
 
+
+//notification 
+router.get("/notification", (req,res) => {
+  queries.notification.getNoti().then((noti) => res.json(noti));
+})
+
+router.post("/notification", (req,res) => {
+  queries.notification.createNoti(req.body).then((result) => res.send(result));
+})
+
+//report
+router.get("/report/problem", (req,res) => {
+  queries.report.getReport().then((report) => res.json(report));
+})
+
+router.post("/report/problem", (req,res) => {
+  queries.report.createReport(req.body).then((result) => res.send(result));
+})
+
+router.get("/report/template", (req,res) => {
+  queries.report.getReportTemplateById(req.params.id).then((template) => res.json(template));
+})
+
+router.post("/report/template", (req,res) => {
+  queries.report.createReportTemplate(req.body).then((result) => res.send(result));
+})
+
 // // Upload a file
 // router.post(
 //   "/api/files",
