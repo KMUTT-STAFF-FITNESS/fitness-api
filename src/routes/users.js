@@ -95,6 +95,13 @@ router.get("/machine/:id", (req, res) => {
     .then((machine) => res.json(machine));
 });
 
+//exercise
+router.get("/exercise/:id", (req, res) => {
+  queries.exercise
+    .getExerciseByUserId(req.params.id)
+    .then((exercise) => res.json(exercise));
+});
+
 // // Upload a file
 // router.post(
 //   "/api/files",

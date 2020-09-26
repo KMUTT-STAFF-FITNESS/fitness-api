@@ -88,4 +88,9 @@ module.exports = {
         .first();
     },
   },
+  exercise: {
+    getExerciseByUserId: function (id) {
+      return knex("exercise").where("member_id", id).orderBy("date", "asc");
+    },
+  },
 };
