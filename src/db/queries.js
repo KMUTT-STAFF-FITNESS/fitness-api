@@ -59,5 +59,16 @@ module.exports = {
     getNoti: function(){
       return knex("notification_news").orderBy("create_at", "desc");
     }
+  },
+  machine: {
+    createMachine: function(machine){
+      return knex("machine").insert(machine).returning("*");
+    },
+    getAllMachine: function(){
+      return knex("machine").orderBy("machine_id");
+    },
+    getMachineById: function(id){
+      return knex("machine").where("machine_id", id).first();
+    }
   }
 };
