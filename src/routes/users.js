@@ -55,6 +55,10 @@ router.get("/notification", (req, res) => {
   queries.notification.getNoti().then((noti) => res.json(noti));
 });
 
+router.get("/notification/:id", (req, res) => {
+  queries.notification.getNotiById(req.params.id).then((noti) => res.json(noti));
+});
+
 router.post("/notification", (req, res) => {
   queries.notification.createNoti(req.body).then((result) => res.send(result));
 });

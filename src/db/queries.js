@@ -1,4 +1,4 @@
-const { returning } = require("./knex");
+const { returning, where } = require("./knex");
 const knex = require("./knex");
 
 module.exports = {
@@ -60,6 +60,9 @@ module.exports = {
     },
     getNoti: function () {
       return knex("notification_news").orderBy("create_at", "desc");
+    },
+    getNotiById: function (id) {
+      return knex("notification_news").where("news_id", id).first();
     },
   },
   machine: {
