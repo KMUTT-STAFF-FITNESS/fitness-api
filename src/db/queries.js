@@ -2,28 +2,31 @@ const { returning, where } = require("./knex");
 const knex = require("./knex");
 
 module.exports = {
+  member: {
+    getMemberType: function () {
+      return knex("membertype");
+    },
+  },
   users: {
     getAll: function () {
       return knex("profile")
-        .join("members", "profile.member_id", "=", "members.member_id")
         .join(
           "membertype",
           "profile.member_type_id",
           "=",
           "membertype.member_type_id"
         )
-        .orderBy("profile.member_id");
+        .orderBy("profile.profile_id");
     },
     getById: function (id) {
       return knex("profile")
-        .join("members", "profile.member_id", "=", "members.member_id")
         .join(
           "membertype",
           "profile.member_type_id",
           "=",
           "membertype.member_type_id"
         )
-        .where("profile.member_id", id)
+        .where("profile.profile_id", id)
         .first();
     },
     createUser: function (user) {

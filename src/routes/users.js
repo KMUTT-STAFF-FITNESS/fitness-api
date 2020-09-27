@@ -5,7 +5,6 @@ const minioMiddleware = expressMinio.middleware();
 
 const router = express.Router();
 const queries = require("../db/queries");
-const { machine } = require("../db/queries");
 
 router.get("/users", (req, res) => {
   queries.users.getAll().then((users) => {
@@ -117,6 +116,11 @@ router.get("/exercise/:id", (req, res) => {
 
 router.post("/exercise", (req, res) => {
   queries.exercise.createExercise(req.body).then((result) => res.send(result));
+});
+
+//membertype
+router.get("/membertype", (req, res) => {
+  queries.member.getMemberType().then((membertype) => res.json(membertype));
 });
 
 // // Upload a file
