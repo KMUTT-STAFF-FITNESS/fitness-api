@@ -19,6 +19,8 @@ exports.seed = function (knex) {
           height: "180",
           address: "KMUTT PRACHAUTHIT",
           department: "School of Information Technology",
+          disease: "หอบ ภูมิแพ้",
+          disease_detail: "แพ้ฝุ่นและอาหาร มีแพ้กุ้ง ปู ปลาหมึกด้วย",
         },
       ]);
     });

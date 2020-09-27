@@ -13,6 +13,8 @@ exports.up = function(knex) {
         table.string('height',50)
         table.string('address',300)
         table.string('department',300)
+        table.string('disease',100)
+        table.string('disease_detail',300)
     })
 };
 
