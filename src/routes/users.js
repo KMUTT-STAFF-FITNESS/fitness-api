@@ -5,6 +5,7 @@ const minioMiddleware = expressMinio.middleware();
 
 const router = express.Router();
 const queries = require("../db/queries");
+const { machine } = require("../db/queries");
 
 router.get("/users", (req, res) => {
   queries.users.getAll().then((users) => {
@@ -56,7 +57,9 @@ router.get("/notification", (req, res) => {
 });
 
 router.get("/notification/:id", (req, res) => {
-  queries.notification.getNotiById(req.params.id).then((noti) => res.json(noti));
+  queries.notification
+    .getNotiById(req.params.id)
+    .then((noti) => res.json(noti));
 });
 
 router.post("/notification", (req, res) => {
@@ -97,6 +100,12 @@ router.get("/machine/:id", (req, res) => {
   queries.machine
     .getMachineById(req.params.id)
     .then((machine) => res.json(machine));
+});
+
+router.get("/machine/:id/howtoplay", (req, res) => {
+  queries.machine
+    .getMachineHowToPlay(req.params.id)
+    .then((howto) => res.json(howto));
 });
 
 //exercise

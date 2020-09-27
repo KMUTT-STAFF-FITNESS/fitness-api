@@ -77,6 +77,12 @@ module.exports = {
           "=",
           "machine_type.machine_type_id"
         )
+        .join(
+          "machine_group",
+          "machine.machine_group_id",
+          "=",
+          "machine_group.machine_group_id"
+        )
         .orderBy("machine_id");
     },
     getMachineById: function (id) {
@@ -90,13 +96,16 @@ module.exports = {
         .where("machine_id", id)
         .first();
     },
+    getMachineHowToPlay: function (id) {
+      return knex("howtoplay").where("machine_group_id", id).first();
+    },
   },
   exercise: {
     getExerciseByUserId: function (id) {
       return knex("exercise").where("member_id", id).orderBy("date", "asc");
     },
-    createExercise: function(exercise){
+    createExercise: function (exercise) {
       return knex("exercise").insert(exercise).returning("*");
-    }
+    },
   },
 };
