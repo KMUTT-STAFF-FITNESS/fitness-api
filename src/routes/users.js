@@ -8,7 +8,7 @@ const router = express.Router();
 const queries = require("../db/queries");
 
 const upload = multer({
-  dest: "./uploads/files"
+  dest: "./uploads/files",
   // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
 
@@ -138,19 +138,28 @@ router.post(
   "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
-    console.log(req)
+    console.log(req.file);
     const tempPath = req.file.path;
-    const targetPath = path.join(__dirname, "./uploads/files/image.png");
+    // const targetPath = path.join(
+    //   __dirname,
+    //   `./uploads/files/images.png`
+    // );
+    const targetPath = `${req.file.path}.png`;
 
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
+      console.log("trrueeeee");
       fs.rename(tempPath, targetPath, (err) => {
-        if (err) return handleError(err, res);
+        if (err) {
+          return handleError(err, res);
+        }
 
         res.status(200).contentType("text/plain").end("File uploaded!");
       });
     } else {
       fs.unlink(tempPath, (err) => {
-        if (err) return handleError(err, res);
+        if (err) {
+          return handleError(err, res);
+        }
 
         res
           .status(403)
