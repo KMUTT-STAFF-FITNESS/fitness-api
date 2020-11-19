@@ -3,7 +3,7 @@ exports.up = function(knex) {
   return knex.schema.createTable('notification_news', (table) => {
       table.increments('news_id'),
       table.string('message_title',100),
-      table.string('content', 250),
+      table.string('content', 1000),
       table.string('create_at',50),
       table.string('author',100)
   })
