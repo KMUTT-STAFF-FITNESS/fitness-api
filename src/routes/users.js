@@ -3,6 +3,7 @@ const passport = require("passport");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const axios = require('axios')
 
 const router = express.Router();
 const queries = require("../db/queries");
@@ -72,7 +73,31 @@ router.get("/notification/:id", (req, res) => {
 });
 
 router.post("/notification", (req, res) => {
+
+  const message = { 
+    app_id: "51d6d36f-d9b7-4659-abc0-9d61c025d1a0",
+    headings: {"en": req.body.message_title},
+    contents: {"en": req.body.content},
+    included_segments: ["All"]
+  };
+
+  const headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Authorization": "Basic MDc1ZjE0MmEtNjU5Ni00MjA3LWE3YTktZjJlMDk5MDM0ODRj"
+  };
+  
+
+  axios.post('https://onesignal.com/api/v1/notifications', message, {
+    headers: headers
+  }).then((data) => {
+    console.log("Send Noti Completed == " + data.data)
+  }).catch((err) => {
+    console.log("send noti error ==> " + err)
+  })
+
+
   queries.notification.createNoti(req.body).then((result) => res.send(result));
+
 });
 
 //report
