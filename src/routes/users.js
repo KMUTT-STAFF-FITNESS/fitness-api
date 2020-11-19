@@ -3,7 +3,7 @@ const passport = require("passport");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const axios = require('axios')
+const axios = require("axios");
 
 const router = express.Router();
 const queries = require("../db/queries");
@@ -31,29 +31,24 @@ router.post("/users", (req, res) => {
   queries.users.createUser(req.body).then((result) => res.send(result));
 });
 
-// router.post(
-//   "/login",
-//   passport.authenticate("ldapauth", { session: false }),
-//   function (req, res) {
-//     res.send("status : ",res);
-//   }
-// );
+router.post("/login", (req, res) => {
+  const client_id = "u1UOLdKI";
+  const client_secret = "uv2g9UsBDV0rwlNQZJn4mL3XH";
+  const redirect_uri = "http://localhost:3000/checking";
+  const code = req.body.code;
 
-router.post("/login", function (req, res, next) {
-  passport.authenticate("ldapauth", { session: false }, function (
-    err,
-    user,
-    info
-  ) {
-    if (err) {
-      return next(err); // will generate a 500 error
-    }
-    // Generate a JSON response reflecting authentication status
-    if (!user) {
-      return res.send({ success: false, message: "authentication failed" });
-    }
-    return res.send({ success: true, message: "authentication succeeded" });
-  })(req, res, next);
+  console.log(code)
+
+  axios
+    .get(
+      `https://gatewayservice.sit.kmutt.ac.th/api/oauth/token?client_secret=${client_secret}&client_id=${client_id}&code=${code}&redirect_uri=${redirect_uri}`
+    )
+    .then((data) => {
+      console.log("data => " + data.data);
+    })
+    .catch((err) => {
+      console.log("error => " + err);
+    });
 });
 
 //nfc checkin
@@ -73,31 +68,30 @@ router.get("/notification/:id", (req, res) => {
 });
 
 router.post("/notification", (req, res) => {
-
-  const message = { 
+  const message = {
     app_id: "51d6d36f-d9b7-4659-abc0-9d61c025d1a0",
-    headings: {"en": req.body.message_title},
-    contents: {"en": req.body.content},
-    included_segments: ["All"]
+    headings: { en: req.body.message_title },
+    contents: { en: req.body.content },
+    included_segments: ["All"],
   };
 
   const headers = {
     "Content-Type": "application/json; charset=utf-8",
-    "Authorization": "Basic MDc1ZjE0MmEtNjU5Ni00MjA3LWE3YTktZjJlMDk5MDM0ODRj"
+    Authorization: "Basic MDc1ZjE0MmEtNjU5Ni00MjA3LWE3YTktZjJlMDk5MDM0ODRj",
   };
-  
 
-  axios.post('https://onesignal.com/api/v1/notifications', message, {
-    headers: headers
-  }).then((data) => {
-    console.log("Send Noti Completed == " + data.data)
-  }).catch((err) => {
-    console.log("send noti error ==> " + err)
-  })
-
+  axios
+    .post("https://onesignal.com/api/v1/notifications", message, {
+      headers: headers,
+    })
+    .then((data) => {
+      console.log("Send Noti Completed == " + data.data);
+    })
+    .catch((err) => {
+      console.log("send noti error ==> " + err);
+    });
 
   queries.notification.createNoti(req.body).then((result) => res.send(result));
-
 });
 
 //report
