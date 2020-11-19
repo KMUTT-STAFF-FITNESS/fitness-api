@@ -37,18 +37,20 @@ router.post("/login", (req, res) => {
   const redirect_uri = "http://localhost:3000/checking";
   const code = req.body.code;
 
-  console.log(code)
+  console.log(code);
+
 
   axios
     .get(
       `https://gatewayservice.sit.kmutt.ac.th/api/oauth/token?client_secret=${client_secret}&client_id=${client_id}&code=${code}&redirect_uri=${redirect_uri}`
     )
     .then((data) => {
-      console.log("data => " + data.data);
+      res.json(data.data);
     })
     .catch((err) => {
       console.log("error => " + err);
     });
+  
 });
 
 //nfc checkin
