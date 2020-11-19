@@ -69,6 +69,10 @@ module.exports = {
     },
   },
   machine: {
+    getAllMachineGroup: function (){
+      return knex("machine_group").select()
+    },
+
     createMachine: function (machine) {
       return knex("machine").insert(machine).returning("*");
     },
