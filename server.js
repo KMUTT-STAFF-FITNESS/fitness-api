@@ -19,8 +19,7 @@ app.get("/users", (req, res) => {
 });
 
 app.get("/users/:id", (req, res) => {
-  // res.json(users.find(user => user.member_id === req.param.id))
-  res.json(users.find((user) => user.member_id === req.params.id));
+  res.json(users.find((user) => user.profile_id === req.params.id));
 });
 
 app.post("/users", (req, res) => {
@@ -30,14 +29,14 @@ app.post("/users", (req, res) => {
 
 app.put("/users/:id", (req, res) => {
   const updateIndex = users.findIndex(
-    (user) => user.member_id === req.params.id
+    (user) => user.profile_id === req.params.id
   );
   res.json(Object.assign(users[updateIndex], req.body));
 });
 
 app.delete("/users/:id", (req, res) => {
   const deleteIndex = users.findIndex(
-    (user) => user.member_id === req.params.id
+    (user) => user.profile_id === req.params.id
   );
   users.splice(deleteIndex, 1);
   res.status(204).send;

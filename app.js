@@ -4,6 +4,7 @@ const passport = require("passport");
 const LdapStrategy = require("passport-ldapauth");
 const fs = require("fs");
 const cors = require("cors");
+const path = require("path");
 
 const OPTS = {
   server: {
@@ -24,6 +25,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
+app.use(express.static(path.join(__dirname, "./uploads/files")));
 app.use(cors());
 
 const users = require("./src/routes/users");

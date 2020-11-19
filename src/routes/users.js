@@ -1,10 +1,20 @@
 const express = require("express");
 const passport = require("passport");
-const expressMinio = require("express-middleware-minio");
-const minioMiddleware = expressMinio.middleware();
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const router = express.Router();
 const queries = require("../db/queries");
+
+const upload = multer({
+  dest: "./uploads/files",
+  // you might also want to set some limits: https://github.com/expressjs/multer#limits
+});
+
+const handleError = (err, res) => {
+  res.status(500).contentType("text/plain").end("Oops! Something went wrong!");
+};
 
 router.get("/users", (req, res) => {
   queries.users.getAll().then((users) => {
@@ -123,57 +133,41 @@ router.get("/membertype", (req, res) => {
   queries.member.getMemberType().then((membertype) => res.json(membertype));
 });
 
-// // Upload a file
-// router.post(
-//   "/api/files",
-//   minioMiddleware({ op: expressMinio.Ops.post }),
-//   (req, res) => {
-//     if (req.minio.error) {
-//       res.status(400).json({ error: req.minio.error });
-//     } else {
-//       res.send({ filename: req.minio.post.filename });
-//     }
-//   }
-// );
+// Upload
+router.post(
+  "/upload",
+  upload.single("file" /* name attribute of <file> element in your form */),
+  (req, res) => {
+    console.log(req.file);
+    const tempPath = req.file.path;
+    // const targetPath = path.join(
+    //   __dirname,
+    //   `./uploads/files/images.png`
+    // );
+    const targetPath = `${req.file.path}.png`;
 
-// // List all files
-// router.get(
-//   "/api/files",
-//   minioMiddleware({ op: expressMinio.Ops.list }),
-//   (req, res) => {
-//     if (req.minio.error) {
-//       res.status(400).json({ error: req.minio.error });
-//     } else {
-//       res.send(req.minio.list);
-//     }
-//   }
-// );
+    if (path.extname(req.file.originalname).toLowerCase() === ".png") {
+      console.log("trrueeeee");
+      fs.rename(tempPath, targetPath, (err) => {
+        if (err) {
+          return handleError(err, res);
+        }
 
-// // Download a file
-// router.get(
-//   `/api/files/:filename`,
-//   minioMiddleware({ op: expressMinio.Ops.getStream }),
-//   (req, res) => {
-//     if (req.minio.error) {
-//       res.status(400).json({ error: req.minio.error });
-//       return;
-//     }
+        res.status(200).contentType("text/plain").end("File uploaded!");
+      });
+    } else {
+      fs.unlink(tempPath, (err) => {
+        if (err) {
+          return handleError(err, res);
+        }
 
-//     res.attachment(req.minio.get.originalName);
-//     req.minio.get.stream.pipe(res);
-//   }
-// );
+        res
+          .status(403)
+          .contentType("text/plain")
+          .end("Only .png files are allowed!");
+      });
+    }
+  }
+);
 
-// // Delete a file
-// router.delete(
-//   "/api/files/:filename",
-//   minioMiddleware({ op: expressMinio.Ops.delete }),
-//   (req, res) => {
-//     if (req.minio.error) {
-//       res.status(400).json({ error: req.minio.error });
-//     } else {
-//       res.send(req.minio.delete);
-//     }
-//   }
-// );
 module.exports = router;

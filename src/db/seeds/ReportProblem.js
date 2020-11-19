@@ -8,7 +8,7 @@ exports.seed = function(knex) {
         {
           report_id: '1',
           machine_id: '1',
-          member_id: '1',
+          profile_id: '1',
           report_message: 'เครื่องวิ่งทำงานไม่คงที่ สายพานชำรุด',
           report_date: '16/09/2563',
         }
