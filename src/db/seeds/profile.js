@@ -7,8 +7,7 @@ exports.seed = function (knex) {
       return knex("profile").insert([
         {
           profile_id: 1,
-          username: "test",
-          password: "test",
+          user_id: "test",
           role_id: "1",
           member_type_id: "2",
           fname: "Thinnpat",

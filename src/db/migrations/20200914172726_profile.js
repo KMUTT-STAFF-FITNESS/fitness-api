@@ -1,8 +1,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('profile', (table) => {
         table.increments('profile_id')
-        table.string('username',50)
-        table.string('password',50)
+        table.string('user_id',50)
         table.string('role_id',50)
         table.string('member_type_id',50)
         table.string('fname',50)

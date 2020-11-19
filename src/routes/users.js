@@ -39,7 +39,6 @@ router.post("/login", (req, res) => {
 
   console.log(code);
 
-
   axios
     .get(
       `https://gatewayservice.sit.kmutt.ac.th/api/oauth/token?client_secret=${client_secret}&client_id=${client_id}&code=${code}&redirect_uri=${redirect_uri}`
@@ -50,7 +49,6 @@ router.post("/login", (req, res) => {
     .catch((err) => {
       console.log("error => " + err);
     });
-  
 });
 
 //nfc checkin
@@ -190,5 +188,21 @@ router.post(
     }
   }
 );
+
+//me
+router.get("/me", (req, res) => {
+  console.log(req.headers);
+  const headers = {
+    Authorization: req.headers.authorization,
+  };
+  axios
+    .get("https://gatewayservice.sit.kmutt.ac.th/api/me", { headers: headers })
+    .then((data) => {
+      res.json(data.data);
+    })
+    .catch((err) => {
+      console.log("me error => " + err);
+    });
+});
 
 module.exports = router;
