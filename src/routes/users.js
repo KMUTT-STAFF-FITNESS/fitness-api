@@ -124,6 +124,10 @@ router.get("/machine", (req, res) => {
   queries.machine.getAllMachine().then((machine) => res.json(machine));
 });
 
+router.get("/machine_group", (req, res) => {
+  queries.machine.getAllMachineGroup().then((machine) => res.json(machine));
+});
+
 router.get("/machine/:id", (req, res) => {
   queries.machine
     .getMachineById(req.params.id)
@@ -135,6 +139,7 @@ router.get("/machine/:id/howtoplay", (req, res) => {
     .getMachineHowToPlay(req.params.id)
     .then((howto) => res.json(howto));
 });
+
 
 //exercise
 router.get("/exercise/:id", (req, res) => {
