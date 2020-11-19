@@ -3,7 +3,7 @@ exports.up = function(knex) {
   return knex.schema.createTable('report_problem', (table) => {
       table.increments('report_id'),
       table.string('machine_id',50),
-      table.string('member_id',50),
+      table.string('profile_id',50),
       table.string('report_message', 500),
       table.string('report_date',50)
   })
