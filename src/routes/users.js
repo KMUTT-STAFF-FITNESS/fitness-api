@@ -7,6 +7,7 @@ const axios = require("axios");
 
 const router = express.Router();
 const queries = require("../db/queries");
+const { users } = require("../db/queries");
 
 const upload = multer({
   dest: "./uploads/files",
@@ -26,6 +27,10 @@ router.get("/users", (req, res) => {
 router.get("/users/:id", (req, res) => {
   queries.users.getById(req.params.id).then((user) => res.json(user));
 });
+
+router.get("/user/type/:user_id", (req,res) => {
+  queries.users.getByUserId(req.params.user_id).then((user) => res.json(user))
+})
 
 router.post("/users", (req, res) => {
   queries.users.createUser(req.body).then((result) => res.send(result));

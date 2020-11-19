@@ -29,6 +29,17 @@ module.exports = {
         .where("profile.profile_id", id)
         .first();
     },
+    getByUserId: function (user_id) {
+      return knex("profile")
+        .join(
+          "membertype",
+          "profile.member_type_id",
+          "=",
+          "membertype.member_type_id"
+        )
+        .where("profile.user_id", user_id)
+        .first();
+    },
     createUser: function (user) {
       return knex("profile").insert(user).returning("*");
     },
@@ -69,10 +80,6 @@ module.exports = {
     },
   },
   machine: {
-    getAllMachineGroup: function (){
-      return knex("machine_group").select()
-    },
-
     createMachine: function (machine) {
       return knex("machine").insert(machine).returning("*");
     },
