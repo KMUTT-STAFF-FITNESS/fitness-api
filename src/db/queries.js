@@ -113,6 +113,9 @@ module.exports = {
     getMachineHowToPlay: function (id) {
       return knex("howtoplay").where("machine_group_id", id).first();
     },
+    getAllMachineGroup: function () {
+      return knex("machine_group").select();
+    },
   },
   exercise: {
     getExerciseByUserId: function (id) {

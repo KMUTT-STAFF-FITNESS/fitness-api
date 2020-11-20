@@ -20,9 +20,7 @@ const checkAuth = (req, res, next) => {
   axios
     .get("https://gatewayservice.sit.kmutt.ac.th/api/me", { headers: headers })
     .then((data) => {
-      // res.json(data.data)
-      // res.json(data.data);
-      // res.sendStatus(200);
+      
       console.log("checkAut data" + data);
       next();
     })
@@ -53,31 +51,20 @@ router.get(
   "/users/:id",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.users.getById(req.params.id).then((user) => res.json(user));
   }
 );
 
-router.get(
-  "/user/type/:user_id",
-  (req, res, next) => {
-    checkAuth(req, res, next);
-    next();
-  },
-  (req, res) => {
-    queries.users
-      .getByUserId(req.params.user_id)
-      .then((user) => res.json(user));
-  }
-);
+router.get("/user/type/:user_id", (req, res) => {
+  queries.users.getByUserId(req.params.user_id).then((user) => res.json(user));
+});
 
 router.post(
   "/users",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.users.createUser(req.body).then((result) => res.send(result));
@@ -109,7 +96,6 @@ router.get(
   "/notification",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.notification.getNoti().then((noti) => res.json(noti));
@@ -120,7 +106,6 @@ router.get(
   "/notification/:id",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.notification
@@ -133,7 +118,6 @@ router.post(
   "/notification",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     const message = {
@@ -170,7 +154,6 @@ router.get(
   "/report/problem",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.report.getReport().then((report) => res.json(report));
@@ -181,7 +164,6 @@ router.post(
   "/report/problem",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.report.createReport(req.body).then((result) => res.send(result));
@@ -192,7 +174,6 @@ router.get(
   "/report/template/:id",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.report
@@ -205,7 +186,6 @@ router.post(
   "/report/template",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.report
@@ -219,7 +199,6 @@ router.post(
   "/machine",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.machine.createMachine(req.body).then((result) => res.send(result));
@@ -230,7 +209,6 @@ router.get(
   "/machine",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.machine.getAllMachine().then((machine) => res.json(machine));
@@ -238,11 +216,10 @@ router.get(
 );
 
 router.get(
-  "/machine_group",
-  (req, res, next) => {
-    checkAuth(req, res, next);
-    next();
-  },
+  "/machine-group",
+  // (req, res, next) => {
+  //   checkAuth(req, res, next);
+  // },
   (req, res) => {
     queries.machine.getAllMachineGroup().then((machine) => res.json(machine));
   }
@@ -252,7 +229,6 @@ router.get(
   "/machine/:id",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.machine
@@ -265,7 +241,6 @@ router.get(
   "/machine/:id/howtoplay",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.machine
@@ -279,7 +254,6 @@ router.get(
   "/exercise/:id",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.exercise
@@ -292,7 +266,6 @@ router.post(
   "/exercise",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   (req, res) => {
     queries.exercise
@@ -302,23 +275,15 @@ router.post(
 );
 
 //membertype
-router.get(
-  "/membertype",
-  (req, res, next) => {
-    checkAuth(req, res, next);
-    next();
-  },
-  (req, res) => {
-    queries.member.getMemberType().then((membertype) => res.json(membertype));
-  }
-);
+router.get("/membertype", (req, res) => {
+  queries.member.getMemberType().then((membertype) => res.json(membertype));
+});
 
 // Upload
 router.post(
   "/upload",
   (req, res, next) => {
     checkAuth(req, res, next);
-    next();
   },
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
