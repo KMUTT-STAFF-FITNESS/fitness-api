@@ -7,34 +7,82 @@ const axios = require("axios");
 
 const router = express.Router();
 const queries = require("../db/queries");
-const { users } = require("../db/queries");
 
 const upload = multer({
   dest: "./uploads/files",
   // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
 
+const checkAuth = (req, res, next) => {
+  const headers = {
+    Authorization: req.headers.authorization,
+  };
+  axios
+    .get("https://gatewayservice.sit.kmutt.ac.th/api/me", { headers: headers })
+    .then((data) => {
+      // res.json(data.data)
+      // res.json(data.data);
+      // res.sendStatus(200);
+      console.log("checkAut data" + data);
+      next();
+    })
+    .catch((err) => {
+      console.log("check Auth err === " + err);
+      res.status(401);
+      return err;
+    });
+};
+
 const handleError = (err, res) => {
   res.status(500).contentType("text/plain").end("Oops! Something went wrong!");
 };
 
-router.get("/users", (req, res) => {
-  queries.users.getAll().then((users) => {
-    res.json(users);
-  });
-});
+router.get(
+  "/users",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
+  (req, res) => {
+    queries.users.getAll().then((users) => {
+      res.json(users);
+    });
+  }
+);
 
-router.get("/users/:id", (req, res) => {
-  queries.users.getById(req.params.id).then((user) => res.json(user));
-});
+router.get(
+  "/users/:id",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.users.getById(req.params.id).then((user) => res.json(user));
+  }
+);
 
-router.get("/user/type/:user_id", (req,res) => {
-  queries.users.getByUserId(req.params.user_id).then((user) => res.json(user))
-})
+router.get(
+  "/user/type/:user_id",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.users
+      .getByUserId(req.params.user_id)
+      .then((user) => res.json(user));
+  }
+);
 
-router.post("/users", (req, res) => {
-  queries.users.createUser(req.body).then((result) => res.send(result));
-});
+router.post(
+  "/users",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.users.createUser(req.body).then((result) => res.send(result));
+  }
+);
 
 router.post("/login", (req, res) => {
   const client_id = "u1UOLdKI";
@@ -56,115 +104,222 @@ router.post("/login", (req, res) => {
     });
 });
 
-//nfc checkin
-router.post("/nfc", (req, res) => {
-  queries.nfc.checkIn(req.body).then((result) => res.send(result));
-});
-
 //notification
-router.get("/notification", (req, res) => {
-  queries.notification.getNoti().then((noti) => res.json(noti));
-});
+router.get(
+  "/notification",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.notification.getNoti().then((noti) => res.json(noti));
+  }
+);
 
-router.get("/notification/:id", (req, res) => {
-  queries.notification
-    .getNotiById(req.params.id)
-    .then((noti) => res.json(noti));
-});
+router.get(
+  "/notification/:id",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.notification
+      .getNotiById(req.params.id)
+      .then((noti) => res.json(noti));
+  }
+);
 
-router.post("/notification", (req, res) => {
-  const message = {
-    app_id: "51d6d36f-d9b7-4659-abc0-9d61c025d1a0",
-    headings: { en: req.body.message_title },
-    contents: { en: req.body.content },
-    included_segments: ["All"],
-  };
+router.post(
+  "/notification",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    const message = {
+      app_id: "51d6d36f-d9b7-4659-abc0-9d61c025d1a0",
+      headings: { en: req.body.message_title },
+      contents: { en: req.body.content },
+      included_segments: ["All"],
+    };
 
-  const headers = {
-    "Content-Type": "application/json; charset=utf-8",
-    Authorization: "Basic MDc1ZjE0MmEtNjU5Ni00MjA3LWE3YTktZjJlMDk5MDM0ODRj",
-  };
+    const headers = {
+      "Content-Type": "application/json; charset=utf-8",
+      Authorization: "Basic MDc1ZjE0MmEtNjU5Ni00MjA3LWE3YTktZjJlMDk5MDM0ODRj",
+    };
 
-  axios
-    .post("https://onesignal.com/api/v1/notifications", message, {
-      headers: headers,
-    })
-    .then((data) => {
-      console.log("Send Noti Completed == " + data.data);
-    })
-    .catch((err) => {
-      console.log("send noti error ==> " + err);
-    });
+    axios
+      .post("https://onesignal.com/api/v1/notifications", message, {
+        headers: headers,
+      })
+      .then((data) => {
+        console.log("Send Noti Completed == " + data.data);
+      })
+      .catch((err) => {
+        console.log("send noti error ==> " + err);
+      });
 
-  queries.notification.createNoti(req.body).then((result) => res.send(result));
-});
+    queries.notification
+      .createNoti(req.body)
+      .then((result) => res.send(result));
+  }
+);
 
 //report
-router.get("/report/problem", (req, res) => {
-  queries.report.getReport().then((report) => res.json(report));
-});
+router.get(
+  "/report/problem",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.report.getReport().then((report) => res.json(report));
+  }
+);
 
-router.post("/report/problem", (req, res) => {
-  queries.report.createReport(req.body).then((result) => res.send(result));
-});
+router.post(
+  "/report/problem",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.report.createReport(req.body).then((result) => res.send(result));
+  }
+);
 
-router.get("/report/template/:id", (req, res) => {
-  queries.report
-    .getReportTemplateById(req.params.id)
-    .then((template) => res.json(template));
-});
+router.get(
+  "/report/template/:id",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.report
+      .getReportTemplateById(req.params.id)
+      .then((template) => res.json(template));
+  }
+);
 
-router.post("/report/template", (req, res) => {
-  queries.report
-    .createReportTemplate(req.body)
-    .then((result) => res.send(result));
-});
+router.post(
+  "/report/template",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.report
+      .createReportTemplate(req.body)
+      .then((result) => res.send(result));
+  }
+);
 
 //machine
-router.post("/machine", (req, res) => {
-  queries.machine.createMachine(req.body).then((result) => res.send(result));
-});
+router.post(
+  "/machine",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.machine.createMachine(req.body).then((result) => res.send(result));
+  }
+);
 
-router.get("/machine", (req, res) => {
-  queries.machine.getAllMachine().then((machine) => res.json(machine));
-});
+router.get(
+  "/machine",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.machine.getAllMachine().then((machine) => res.json(machine));
+  }
+);
 
-router.get("/machine_group", (req, res) => {
-  queries.machine.getAllMachineGroup().then((machine) => res.json(machine));
-});
+router.get(
+  "/machine_group",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.machine.getAllMachineGroup().then((machine) => res.json(machine));
+  }
+);
 
-router.get("/machine/:id", (req, res) => {
-  queries.machine
-    .getMachineById(req.params.id)
-    .then((machine) => res.json(machine));
-});
+router.get(
+  "/machine/:id",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.machine
+      .getMachineById(req.params.id)
+      .then((machine) => res.json(machine));
+  }
+);
 
-router.get("/machine/:id/howtoplay", (req, res) => {
-  queries.machine
-    .getMachineHowToPlay(req.params.id)
-    .then((howto) => res.json(howto));
-});
-
+router.get(
+  "/machine/:id/howtoplay",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.machine
+      .getMachineHowToPlay(req.params.id)
+      .then((howto) => res.json(howto));
+  }
+);
 
 //exercise
-router.get("/exercise/:id", (req, res) => {
-  queries.exercise
-    .getExerciseByUserId(req.params.id)
-    .then((exercise) => res.json(exercise));
-});
+router.get(
+  "/exercise/:id",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.exercise
+      .getExerciseByUserId(req.params.id)
+      .then((exercise) => res.json(exercise));
+  }
+);
 
-router.post("/exercise", (req, res) => {
-  queries.exercise.createExercise(req.body).then((result) => res.send(result));
-});
+router.post(
+  "/exercise",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.exercise
+      .createExercise(req.body)
+      .then((result) => res.send(result));
+  }
+);
 
 //membertype
-router.get("/membertype", (req, res) => {
-  queries.member.getMemberType().then((membertype) => res.json(membertype));
-});
+router.get(
+  "/membertype",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
+  (req, res) => {
+    queries.member.getMemberType().then((membertype) => res.json(membertype));
+  }
+);
 
 // Upload
 router.post(
   "/upload",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+    next();
+  },
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
     console.log(req.file);
