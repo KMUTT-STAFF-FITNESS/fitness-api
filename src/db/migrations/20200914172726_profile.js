@@ -16,6 +16,7 @@ exports.up = function(knex) {
         table.string('department',300)
         table.string('disease',100)
         table.string('disease_detail',300)
+        table.boolean('is_member').notNullable().defaultTo(false)
     })
 };
 
