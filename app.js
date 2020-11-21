@@ -25,7 +25,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
-app.use(express.static(path.join(__dirname, "./uploads/files")));
+app.use(express.static("public"));
+
 app.use(cors());
 
 const users = require("./src/routes/users");

@@ -143,5 +143,8 @@ module.exports = {
     createCashPay: function (payment) {
       return knex("payment").insert(payment).returning("*");
     },
+    uploadSlip: function (slip) {
+      return knex("payment").insert(slip).returning("*");
+    },
   },
 };

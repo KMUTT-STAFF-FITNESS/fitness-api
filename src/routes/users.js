@@ -9,7 +9,7 @@ const router = express.Router();
 const queries = require("../db/queries");
 
 const upload = multer({
-  dest: "./uploads/files",
+  dest: "public/images",
   // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
 
@@ -92,9 +92,9 @@ router.post(
 );
 router.post(
   "/pay",
-  // (req, res, next) => {
-  //   checkAuth(req, res, next);
-  // },
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
   (req, res) => {
     queries.payment.createCashPay(req.body).then((result) => res.send(result));
   }
@@ -310,7 +310,7 @@ router.get("/membertype", (req, res) => {
 
 // Upload
 router.post(
-  "/upload",
+  "/upload/:id",
   (req, res, next) => {
     checkAuth(req, res, next);
   },
@@ -320,9 +320,13 @@ router.post(
     const tempPath = req.file.path;
     // const targetPath = path.join(
     //   __dirname,
-    //   `./uploads/files/images.png`
+    //   `/public/files/${req.file.originalname}.png`
     // );
     const targetPath = `${req.file.path}.png`;
+    const slip = {
+      profile_id: req.params.id,
+      receipt_path: targetPath,
+    };
 
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
       fs.rename(tempPath, targetPath, (err) => {
@@ -330,7 +334,7 @@ router.post(
           return handleError(err, res);
         }
 
-        res.status(200).contentType("text/plain").end("File uploaded!");
+        queries.payment.uploadSlip(slip).then((result) => res.send(result));
       });
     } else {
       fs.unlink(tempPath, (err) => {
