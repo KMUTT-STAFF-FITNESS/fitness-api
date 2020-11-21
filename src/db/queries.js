@@ -26,9 +26,9 @@ module.exports = {
           "=",
           "membertype.member_type_id"
         )
-        .where("profile.is_member",false);
+        .where("profile.is_member", false);
     },
-   
+
     getById: function (id) {
       return knex("profile")
         .join(
@@ -68,7 +68,9 @@ module.exports = {
       return knex("report_problem").insert(report).returning("*");
     },
     getReport: function () {
-      return knex("report_problem").orderBy("report_date", "desc");
+      return knex("report_problem")
+        .join("machine", "report_problem.machine_id", "=", "machine.machine_id")
+        .orderBy("report_problem.report_date", "asc");
     },
     createReportTemplate: function (reportTemp) {
       return knex("report_template").insert(reportTemp).returning("*");
