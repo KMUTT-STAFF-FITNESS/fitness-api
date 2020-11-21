@@ -20,7 +20,6 @@ const checkAuth = (req, res, next) => {
   axios
     .get("https://gatewayservice.sit.kmutt.ac.th/api/me", { headers: headers })
     .then((data) => {
-      console.log("checkAut data" + data);
       next();
     })
     .catch((err) => {
@@ -33,6 +32,16 @@ const checkAuth = (req, res, next) => {
 const handleError = (err, res) => {
   res.status(500).contentType("text/plain").end("Oops! Something went wrong!");
 };
+
+router.put(
+  "/approve",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
+  (req, res) => {
+    queries.users.approveUser(req.body).then((result) => res.sendStatus(200));
+  }
+);
 
 router.get(
   "/users",
@@ -105,8 +114,6 @@ router.post("/login", (req, res) => {
   const client_secret = "uv2g9UsBDV0rwlNQZJn4mL3XH";
   const redirect_uri = "http://localhost:3000/checking";
   const code = req.body.code;
-
-  console.log(code);
 
   axios
     .get(
@@ -316,12 +323,8 @@ router.post(
   },
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
-    console.log(req.file);
     const tempPath = req.file.path;
-    // const targetPath = path.join(
-    //   __dirname,
-    //   `/public/files/${req.file.originalname}.png`
-    // );
+
     const targetPath = `${req.file.path}.png`;
     const slip = {
       profile_id: req.params.id,
@@ -353,7 +356,6 @@ router.post(
 
 //me
 router.get("/me", (req, res) => {
-  console.log(req.headers);
   const headers = {
     Authorization: req.headers.authorization,
   };

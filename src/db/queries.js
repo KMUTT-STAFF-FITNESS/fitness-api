@@ -55,6 +55,12 @@ module.exports = {
     createUser: function (user) {
       return knex("profile").insert(user).returning("*");
     },
+    approveUser: function (user) {
+      return knex("profile")
+        .where(user)
+        .update({ is_member: 1 })
+        .returning("*");
+    },
     // editUser: function (user) {
     //   return knex("members");
     // },
