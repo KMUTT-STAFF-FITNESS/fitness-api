@@ -90,6 +90,15 @@ router.post(
     queries.users.createUser(req.body).then((result) => res.send(result));
   }
 );
+router.post(
+  "/pay",
+  // (req, res, next) => {
+  //   checkAuth(req, res, next);
+  // },
+  (req, res) => {
+    queries.payment.createCashPay(req.body).then((result) => res.send(result));
+  }
+);
 
 router.post("/login", (req, res) => {
   const client_id = "u1UOLdKI";
@@ -316,7 +325,6 @@ router.post(
     const targetPath = `${req.file.path}.png`;
 
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
-      console.log("trrueeeee");
       fs.rename(tempPath, targetPath, (err) => {
         if (err) {
           return handleError(err, res);

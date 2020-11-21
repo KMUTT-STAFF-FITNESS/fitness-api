@@ -26,6 +26,7 @@ module.exports = {
           "=",
           "membertype.member_type_id"
         )
+        .join("payment", "profile.profile_id", "=", "payment.profile_id")
         .where("profile.is_member", false);
     },
 
@@ -136,6 +137,11 @@ module.exports = {
     },
     createExercise: function (exercise) {
       return knex("exercise").insert(exercise).returning("*");
+    },
+  },
+  payment: {
+    createCashPay: function (payment) {
+      return knex("payment").insert(payment).returning("*");
     },
   },
 };
