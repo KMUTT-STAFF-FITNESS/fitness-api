@@ -18,6 +18,17 @@ module.exports = {
         )
         .orderBy("profile.profile_id");
     },
+    getPendingUsers: function () {
+      return knex("profile")
+        .join(
+          "membertype",
+          "profile.member_type_id",
+          "=",
+          "membertype.member_type_id"
+        )
+        .where("profile.is_member",false);
+    },
+   
     getById: function (id) {
       return knex("profile")
         .join(

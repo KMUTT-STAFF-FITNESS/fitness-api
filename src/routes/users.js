@@ -20,7 +20,6 @@ const checkAuth = (req, res, next) => {
   axios
     .get("https://gatewayservice.sit.kmutt.ac.th/api/me", { headers: headers })
     .then((data) => {
-      
       console.log("checkAut data" + data);
       next();
     })
@@ -56,6 +55,27 @@ router.get(
     queries.users.getById(req.params.id).then((user) => res.json(user));
   }
 );
+router.get(
+  "/userspending",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
+  (req, res) => {
+    queries.users.getPendingUsers().then((users) => {
+      res.json(users);
+    });
+  }
+);
+
+// router.get(
+//   "/users/pending",
+//   (req, res, next) => {
+//     checkAuth(req, res, next);
+//   },
+//   (req, res) => {
+//     queries.users.getPendingUsers().then((user) => res.json(user));
+//   }
+// );
 
 router.get("/user/type/:user_id", (req, res) => {
   queries.users.getByUserId(req.params.user_id).then((user) => res.json(user));
