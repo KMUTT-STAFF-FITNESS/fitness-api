@@ -16,6 +16,7 @@ module.exports = {
           "=",
           "membertype.member_type_id"
         )
+        .where("profile.role_id", 3)
         .orderBy("profile.profile_id");
     },
     getPendingUsers: function () {
@@ -60,6 +61,9 @@ module.exports = {
         .where(user)
         .update({ is_member: 1 })
         .returning("*");
+    },
+    deleteUser: function (user) {
+      return knex("profile").where(user).del();
     },
     // editUser: function (user) {
     //   return knex("members");
@@ -135,6 +139,21 @@ module.exports = {
     },
     getAllMachineGroup: function () {
       return knex("machine_group").select();
+    },
+    getAllMachineType: function () {
+      return knex("machine_type").select();
+    },
+    editMachine: function (data) {
+      return knex("machine")
+        .where({ machine_id: data.machine_id })
+        .update(data)
+        .returning("*");
+    },
+    deleteMachine: function (id) {
+      return knex("machine")
+        .where({ machine_id: id.machine_id })
+        .del()
+        .returning("*");
     },
   },
   exercise: {

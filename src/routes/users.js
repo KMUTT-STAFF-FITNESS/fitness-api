@@ -55,6 +55,16 @@ router.get(
   }
 );
 
+router.put(
+  "/user",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
+  (req, res) => {
+    queries.users.deleteUser(req.body).then((result) => res.sendStatus(200));
+  }
+);
+
 router.get(
   "/users/:id",
   (req, res, next) => {
@@ -252,12 +262,22 @@ router.get(
 );
 
 router.get(
-  "/machine-group",
-  // (req, res, next) => {
-  //   checkAuth(req, res, next);
-  // },
+  "/machinegroup",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
   (req, res) => {
     queries.machine.getAllMachineGroup().then((machine) => res.json(machine));
+  }
+);
+
+router.get(
+  "/machinetype",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
+  (req, res) => {
+    queries.machine.getAllMachineType().then((machine) => res.json(machine));
   }
 );
 
@@ -282,6 +302,28 @@ router.get(
     queries.machine
       .getMachineHowToPlay(req.params.id)
       .then((howto) => res.json(howto));
+  }
+);
+
+router.put(
+  "/machine",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
+  (req, res) => {
+    queries.machine.editMachine(req.body).then((result) => res.sendStatus(200));
+  }
+);
+
+router.put(
+  "/machinedelete",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
+  (req, res) => {
+    queries.machine
+      .deleteMachine(req.body)
+      .then((result) => res.sendStatus(200));
   }
 );
 
