@@ -65,6 +65,18 @@ router.put(
   }
 );
 
+router.put(
+  "/user/:id",
+  (req, res, next) => {
+    checkAuth(req, res, next);
+  },
+  (req, res) => {
+    queries.users
+      .editUser(req.body, req.params.id)
+      .then((result) => res.sendStatus(200));
+  }
+);
+
 router.get(
   "/users/:id",
   (req, res, next) => {

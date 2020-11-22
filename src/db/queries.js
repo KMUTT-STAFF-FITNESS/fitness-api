@@ -65,9 +65,9 @@ module.exports = {
     deleteUser: function (user) {
       return knex("profile").where(user).del();
     },
-    // editUser: function (user) {
-    //   return knex("members");
-    // },
+    editUser: function (user, id) {
+      return knex("profile").where({ user_id: id }).update(user).returning("*");
+    },
   },
   nfc: {
     checkIn: function (id) {
