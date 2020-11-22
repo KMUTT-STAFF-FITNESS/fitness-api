@@ -40,7 +40,7 @@ exports.seed = function (knex) {
           howtoplay_id: 5,
           machine_group_id: "5",
           detail: "1. เปิดสวิตซ์ด้านหลังของตัวเครื่อง <br/>2. กดปุ่มสีเขียว ตัว P เครื่องจะเริ่มสั่น <br/>3. ปรับความเร็วใช้เครื่องหมาย + หรือ – <br/>4. เครื่องจะถูกตั้งเวลาไว้ที่ 10 นาที <br/>5. เมื่อต้องการหยุดให้กดปุ่มสีแดง",
-          video_path: "https://www.youtube.com/embed/q71ke55nbWU,
+          video_path: "https://www.youtube.com/embed/q71ke55nbWU",
         },
         {
           howtoplay_id: 6,
