@@ -385,7 +385,11 @@ router.post(
       receipt_path: targetPath,
     };
 
-    if (path.extname(req.file.originalname).toLowerCase() === ".png") {
+    if (
+      path.extname(req.file.originalname).toLowerCase() === ".png" ||
+      path.extname(req.file.originalname).toLowerCase() === ".jpg" ||
+      path.extname(req.file.originalname).toLowerCase() === ".jpeg"
+    ) {
       fs.rename(tempPath, targetPath, (err) => {
         if (err) {
           return handleError(err, res);
