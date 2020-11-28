@@ -134,7 +134,7 @@ router.post(
 router.post("/login", (req, res) => {
   const client_id = "u1UOLdKI";
   const client_secret = "uv2g9UsBDV0rwlNQZJn4mL3XH";
-  const redirect_uri = "http://localhost:3000/checking";
+  const redirect_uri = "http://ksf.sit.kmutt.ac.th/checking";
   const code = req.body.code;
 
   axios
