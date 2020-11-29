@@ -1,4 +1,4 @@
-const environment = "development";
+const environment = "production";
 const config = require("../../knexfile");
 const enviromentConfig = config[environment];
 const knex = require("knex");

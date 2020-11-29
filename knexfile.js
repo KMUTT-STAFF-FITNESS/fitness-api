@@ -2,7 +2,7 @@ module.exports = {
   development: {
     client: "mysql",
     connection: {
-      host: "ksf.sit.kmutt.ac.th",
+      host: "localhost",
       user: "root",
       password: "root",
       database: "ksf",
